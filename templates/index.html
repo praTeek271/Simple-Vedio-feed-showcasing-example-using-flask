@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Feed</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            margin: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: all 0.9s ease-in-out;
+            /* animation: forwards 1s ease-in-out; */
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            min-width: fit-content;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+
+        img {
+            width: 80%;
+            border: 2px solid #007bff;
+            border-radius: 10px;
+            transition: border-color 0.3s ease-in-out;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        img:hover {
+            border-color: #0056b3;
+        }
+
+        .btn-group {
+            margin-top: 20px;
+            text-align: center;
+            position: absolute;
+            display: -ms-inline-flexbox;
+            display: inline-flex;
+            vertical-align: middle;
+            top: 29rem;
+            z-index: 4;
+            left: 28rem;
+        }
+
+        .btn {
+            margin: 0 10px;
+            border-radius: 50px;
+            border: 3px dashed #00000099;
+            /* animation: transition 1s ease-in-out; */
+            transition: all 0.9s ease-in-out;
+        }
+        .btn:hover {
+            /* animation: transition 1s ease-in; */
+            transition: all 1s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Camera Feed</h1>
+
+        <!-- // if empty vedio feed then show this message -->
+        <p id="message" style="text-align: center;">No video feed available</p>
+        <!-- // if video feed is available then show this -->
+
+        <img id="video-feed" src="{{ url_for('video_feed') }}" alt="Video Feed"  onerror="alert('Sorry Please Reload');" >
+        <div class="btn-group">
+            <button class="btn btn-success" onclick="start()">📷</button>
+            <button class="btn btn-danger" onclick="stop()">📞</button>
+        </div>
+    </div>
+    <script>
+        function start() {
+            fetch("/start")
+                .then(response => {
+                    // Reload the image source to restart the video feed
+                    const videoFeed = document.getElementById('video-feed');
+                    const timestamp = new Date().getTime();
+                    videoFeed.src = "{{ url_for('video_feed') }}?" + timestamp;
+                });
+        }
+
+        function stop() {
+            fetch("/stop");
+        }
+
+        // function alert(msg) {
+        //     a;
+        // }
+    </script>
+
+</body>
+
+</html>
